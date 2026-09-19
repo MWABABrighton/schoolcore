@@ -66,25 +66,72 @@
             <strong>Date of Birth:</strong>
             {{ student.date_of_birth }}
         </p>
+        <p>
+    <strong>Examination:</strong>
+    {% if results %}
+        {{ results.0.examination.name }}
+    {% else %}
+        No examination
+    {% endif %}
+</p>
+
+<p>
+    <strong>Academic Year:</strong>
+    {% if results %}
+        {{ results.0.examination.academic_year }}
+    {% else %}
+        -
+    {% endif %}
+</p>
+
+<p>
+    <strong>Term:</strong>
+    {% if results %}
+        {{ results.0.examination.get_term_display }}
+    {% else %}
+        -
+    {% endif %}
+</p>
     </div>
 
     <table>
         <thead>
-            <tr>
-                <th>Subject</th>
-                <th>Marks</th>
-                <th>Remarks</th>
-            </tr>
+           <tr>
+    <th>Subject</th>
+    <th>Marks</th>
+    <th>Grade</th>
+    <th>Remarks</th>
+</tr>
         </thead>
 
         <tbody>
-            <tr>
-                <td colspan="3">
-                    Results will appear here.
-                </td>
-            </tr>
-        </tbody>
+    {% for result in results %}
+    <tr>
+        <td>{{ result.subject.name }}</td>
+        <td>{{ result.marks }}</td>
+        <td>{{ result.grade }}</td>
+        <td>{{ result.remarks|default:"-" }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">
+            No results available.
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
     </table>
+    <div class="summary">
+    <p>
+        <strong>Total Marks:</strong>
+        {{ total_marks }}
+    </p>
+
+    <p>
+        <strong>Average Marks:</strong>
+        {{ average_marks|floatformat:2 }}
+    </p>
+</div>
 
 </body>
 </html>
