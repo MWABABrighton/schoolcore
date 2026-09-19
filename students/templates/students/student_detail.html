@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.first_name }} {{ student.last_name }} | SchoolCore{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1>Student Profile</h1>
+        <p class="text-muted">
+            View student information and academic records.
+        </p>
+    </div>
+
+    <a href="{% url 'student_list' %}" class="btn btn-secondary">
+        Back to Students
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Student Information</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <strong>Student Number</strong>
+                <div>{{ student.student_number }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Full Name</strong>
+                <div>
+                    {{ student.first_name }}
+                    {{ student.middle_name }}
+                    {{ student.last_name }}
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Gender</strong>
+                <div>{{ student.get_gender_display }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Date of Birth</strong>
+                <div>{{ student.date_of_birth }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Phone Number</strong>
+                <div>{{ student.phone_number|default:"Not provided" }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Email</strong>
+                <div>{{ student.email|default:"Not provided" }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Status</strong>
+                <div>
+                    {% if student.is_active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inactive</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <strong>Address</strong>
+                <div>{{ student.address|default:"Not provided" }}</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-header">
+        <h5 class="mb-0">Guardians</h5>
+    </div>
+
+    <div class="card-body">
+
+        {% for guardian in student.guardians.all %}
+
+            <div class="border-bottom pb-3 mb-3">
+
+                <strong>{{ guardian.full_name }}</strong>
+
+                <div class="text-muted">
+                    {{ guardian.get_relationship_display }}
+                </div>
+
+                <div>
+                    Phone: {{ guardian.phone_number }}
+                </div>
+
+                {% if guardian.email %}
+                    <div>
+                        Email: {{ guardian.email }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted mb-0">
+                No guardian information available.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</div>
+
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-header">
+        <h5 class="mb-0">Academic History</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Academic Year</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for enrolment in enrolments %}
+
+                    <tr>
+
+                        <td>
+                            {{ enrolment.academic_year.year }}
+                        </td>
+
+                        <td>
+                            {{ enrolment.section.school_class.name }}
+                        </td>
+
+                        <td>
+                            {{ enrolment.section.name }}
+                        </td>
+
+                        <td>
+
+                            {% if enrolment.is_active %}
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    Inactive
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No academic history available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

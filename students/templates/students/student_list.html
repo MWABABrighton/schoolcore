@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Students | SchoolCore{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1>Students</h1>
+        <p class="text-muted">
+            Manage registered students.
+        </p>
+    </div>
+
+    <a href="/admin/students/student/add/" class="btn btn-primary">
+        Add Student
+    </a>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Student Number</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Date of Birth</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student.student_number }}
+                        </td>
+
+                        <td>
+                            {{ student.first_name }}
+                            {{ student.middle_name }}
+                            {{ student.last_name }}
+                        </td>
+
+                        <td>
+                            {{ student.get_gender_display }}
+                        </td>
+
+                        <td>
+                            {{ student.date_of_birth }}
+                        </td>
+
+                        <td>
+                            {% if student.is_active %}
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    Inactive
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+    <a
+        href="{% url 'student_detail' student.id %}"
+        class="btn btn-sm btn-outline-primary"
+    >
+        View Profile
+    </a>
+</td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            No students found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | SchoolCore{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h1 class="mb-2">SchoolCore</h1>
+
+    <p class="text-muted mb-4">
+        School Management & Academic Information System
+    </p>
+
+    <div class="row g-4">
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Active Students</h5>
+                    <h2>{{ student_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Active Teachers</h5>
+                    <h2>{{ teacher_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Classes</h5>
+                    <h2>{{ class_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Active Subjects</h5>
+                    <h2>{{ subject_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Attendance Records</h5>
+                    <h2>{{ attendance_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
