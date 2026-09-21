@@ -16,15 +16,30 @@
         </p>
     </div>
 
-
     <div>
 
         <a
-            href="{% url 'record_payment' %}"
-            class="btn btn-primary"
-        >
-            + Record Payment
-        </a>
+    href="{% url 'create_fee_structure' %}"
+    class="btn btn-outline-primary me-2"
+>
+    + Fee Structure
+</a>
+
+
+
+<a
+    href="{% url 'payment_list' %}"
+    class="btn btn-outline-secondary me-2"
+>
+    Payment History
+</a>
+
+<a
+    href="{% url 'record_payment' %}"
+    class="btn btn-primary"
+>
+    + Record Payment
+</a>
 
     </div>
 
@@ -137,6 +152,8 @@
 
                         <th>Balance</th>
 
+                        <th>Action</th>
+
                     </tr>
 
                 </thead>
@@ -177,6 +194,17 @@
                             K{{ fee.balance|floatformat:2 }}
                         </td>
 
+                        <td>
+
+                            <a
+                                href="{% url 'student_finance' fee.student.id %}"
+                                class="btn btn-sm btn-outline-primary"
+                            >
+                                Statement
+                            </a>
+
+                        </td>
+
                     </tr>
 
                     {% empty %}
@@ -184,7 +212,7 @@
                     <tr>
 
                         <td
-                            colspan="7"
+                            colspan="8"
                             class="text-center text-muted py-4"
                         >
                             No student fee records found.

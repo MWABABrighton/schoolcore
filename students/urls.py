@@ -9,4 +9,10 @@ urlpatterns = [
         views.student_detail,
         name="student_detail",
     ),
+
+    path(
+    "new/",
+    views.student_create,
+    name="student_create",
+),
 ]

@@ -1,6 +1,30 @@
 from django import forms
 
-from .models import Payment
+from .models import FeeStructure, Payment, StudentFee
+
+
+class FeeStructureForm(forms.ModelForm):
+
+    class Meta:
+        model = FeeStructure
+
+        fields = [
+            "academic_year",
+            "school_class",
+            "fee_type",
+            "amount",
+            "description",
+            "is_active",
+        ]
+
+        widgets = {
+            "amount": forms.NumberInput(
+                attrs={
+                    "step": "0.01",
+                    "min": "0",
+                }
+            ),
+        }
 
 
 class PaymentForm(forms.ModelForm):
@@ -48,3 +72,17 @@ class PaymentForm(forms.ModelForm):
                 )
 
         return amount
+
+
+class StudentFeeForm(forms.ModelForm):
+
+    class Meta:
+        model = StudentFee
+
+        fields = [
+            "student",
+            "academic_year",
+            "fee_structure",
+            "amount_due",
+            "is_active",
+        ]

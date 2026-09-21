@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Register Student | SchoolCore{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1>Register Student</h1>
+        <p class="text-muted">
+            Add a new student to the school system.
+        </p>
+    </div>
+
+    <a
+        href="{% url 'student_list' %}"
+        class="btn btn-outline-secondary"
+    >
+        Back to Students
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Student Number
+                    </label>
+
+                    {{ form.student_number }}
+
+                    {% if form.student_number.errors %}
+                        <div class="text-danger small">
+                            {{ form.student_number.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        First Name
+                    </label>
+
+                    {{ form.first_name }}
+
+                    {% if form.first_name.errors %}
+                        <div class="text-danger small">
+                            {{ form.first_name.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Middle Name
+                    </label>
+
+                    {{ form.middle_name }}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Last Name
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {% if form.last_name.errors %}
+                        <div class="text-danger small">
+                            {{ form.last_name.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Date of Birth
+                    </label>
+
+                    {{ form.date_of_birth }}
+
+                    {% if form.date_of_birth.errors %}
+                        <div class="text-danger small">
+                            {{ form.date_of_birth.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Gender
+                    </label>
+
+                    {{ form.gender }}
+
+                    {% if form.gender.errors %}
+                        <div class="text-danger small">
+                            {{ form.gender.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Phone Number
+                    </label>
+
+                    {{ form.phone_number }}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    {{ form.email }}
+
+                </div>
+
+
+                <div class="col-md-8">
+
+                    <label class="form-label">
+                        Address
+                    </label>
+
+                    {{ form.address }}
+
+                </div>
+
+
+                <!-- Academic Year -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Academic Year
+                    </label>
+
+                    {{ form.academic_year }}
+
+                    {% if form.academic_year.errors %}
+                        <div class="text-danger small">
+                            {{ form.academic_year.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Class & Section -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Class & Section
+                    </label>
+
+                    {{ form.section }}
+
+                    {% if form.section.errors %}
+                        <div class="text-danger small">
+                            {{ form.section.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <div class="form-check mt-2">
+
+                        {{ form.is_active }}
+
+                        <label class="form-check-label">
+                            Active Student
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4">
+
+
+            <div class="d-flex justify-content-end gap-2">
+
+                <a
+                    href="{% url 'student_list' %}"
+                    class="btn btn-outline-secondary"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Register Student
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

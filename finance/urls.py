@@ -11,4 +11,34 @@ urlpatterns = [
         views.record_payment,
         name="record_payment",
     ),
+
+    path(
+        "payments/",
+        views.payment_list,
+        name="payment_list",
+    ),
+
+    path(
+    "student/<int:student_id>/",
+    views.student_finance,
+    name="student_finance",
+    ),
+
+    path(
+    "payments/<int:payment_id>/",
+    views.payment_detail,
+    name="payment_detail",
+    ),
+
+    path(
+    "student-fees/new/",
+    views.create_student_fee,
+    name="create_student_fee",
+    ),
+
+    path(
+    "fee-structures/new/",
+    views.create_fee_structure,
+    name="create_fee_structure",
+    ),
 ]

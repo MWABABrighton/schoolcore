@@ -1,7 +1,10 @@
 from django.db import models
 
+from finance.services import allocate_fees_for_enrolment
+
 
 class Student(models.Model):
+
     GENDER_CHOICES = [
         ("M", "Male"),
         ("F", "Female"),
@@ -12,14 +15,21 @@ class Student(models.Model):
         unique=True,
     )
 
-    first_name = models.CharField(max_length=100)
+    first_name = models.CharField(
+        max_length=100,
+    )
+
     middle_name = models.CharField(
         max_length=100,
         blank=True,
     )
-    last_name = models.CharField(max_length=100)
+
+    last_name = models.CharField(
+        max_length=100,
+    )
 
     date_of_birth = models.DateField()
+
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,
@@ -29,6 +39,7 @@ class Student(models.Model):
         max_length=20,
         blank=True,
     )
+
     email = models.EmailField(
         blank=True,
     )
@@ -44,14 +55,21 @@ class Student(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+
     updated_at = models.DateTimeField(
         auto_now=True,
     )
 
     def __str__(self):
-        return f"{self.student_number} - {self.first_name} {self.last_name}"
+        return (
+            f"{self.student_number} - "
+            f"{self.first_name} "
+            f"{self.last_name}"
+        )
+
 
 class Guardian(models.Model):
+
     RELATIONSHIP_CHOICES = [
         ("FATHER", "Father"),
         ("MOTHER", "Mother"),
@@ -65,14 +83,18 @@ class Guardian(models.Model):
         related_name="guardians",
     )
 
-    full_name = models.CharField(max_length=200)
+    full_name = models.CharField(
+        max_length=200,
+    )
 
     relationship = models.CharField(
         max_length=20,
         choices=RELATIONSHIP_CHOICES,
     )
 
-    phone_number = models.CharField(max_length=20)
+    phone_number = models.CharField(
+        max_length=20,
+    )
 
     email = models.EmailField(
         blank=True,
@@ -87,9 +109,14 @@ class Guardian(models.Model):
     )
 
     def __str__(self):
-        return f"{self.full_name} - {self.student}"
+        return (
+            f"{self.full_name} - "
+            f"{self.student}"
+        )
+
 
 class Enrolment(models.Model):
+
     student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE,
@@ -119,10 +146,26 @@ class Enrolment(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["student", "academic_year"],
+                fields=[
+                    "student",
+                    "academic_year",
+                ],
                 name="unique_student_per_academic_year",
             )
         ]
 
     def __str__(self):
-        return f"{self.student} - {self.academic_year} - {self.section}"
+        return (
+            f"{self.student} - "
+            f"{self.academic_year} - "
+            f"{self.section}"
+        )
+
+    def save(self, *args, **kwargs):
+
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if is_new:
+            allocate_fees_for_enrolment(self)

@@ -96,6 +96,18 @@ class StudentFee(models.Model):
         auto_now=True,
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "student",
+                    "academic_year",
+                    "fee_structure",
+                ],
+                name="unique_student_fee_structure",
+            )
+        ]
+
     @property
     def amount_paid(self):
         return self.payments.aggregate(

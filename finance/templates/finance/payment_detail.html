@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Payment Receipt - SchoolCore
+{% endblock %}
+
+{% block content %}
+
+<div class="receipt-page">
+
+    <!-- Screen-only controls -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+
+        <div>
+            <h2>Payment Receipt</h2>
+
+            <p class="text-muted mb-0">
+                Payment transaction details
+            </p>
+        </div>
+
+        <div>
+
+            <a
+                href="{% url 'payment_list' %}"
+                class="btn btn-outline-secondary"
+            >
+                Payment History
+            </a>
+
+            <button
+                onclick="window.print()"
+                class="btn btn-primary"
+            >
+                Print Receipt
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Receipt -->
+
+    <div class="receipt-card">
+
+        <div class="text-center mb-4">
+
+            <h2 class="mb-1">
+                SchoolCore
+            </h2>
+
+            <h5>
+                OFFICIAL PAYMENT RECEIPT
+            </h5>
+
+        </div>
+
+
+        <hr>
+
+
+        <div class="row mb-4">
+
+            <div class="col-6">
+
+                <strong>
+                    Receipt Number
+                </strong>
+
+                <p>
+                    {{ payment.receipt_number }}
+                </p>
+
+            </div>
+
+
+            <div class="col-6 text-end">
+
+                <strong>
+                    Payment Date
+                </strong>
+
+                <p>
+                    {{ payment.payment_date }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <h5 class="mb-3">
+            Student Information
+        </h5>
+
+
+        <table class="table table-bordered mb-4">
+
+            <tbody>
+
+                <tr>
+
+                    <th width="35%">
+                        Student Number
+                    </th>
+
+                    <td>
+                        {{ payment.student_fee.student.student_number }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Student Name
+                    </th>
+
+                    <td>
+                        {{ payment.student_fee.student.first_name }}
+                        {{ payment.student_fee.student.last_name }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Academic Year
+                    </th>
+
+                    <td>
+                        {{ payment.student_fee.academic_year }}
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <h5 class="mb-3">
+            Payment Information
+        </h5>
+
+
+        <table class="table table-bordered mb-4">
+
+            <tbody>
+
+                <tr>
+
+                    <th width="35%">
+                        Fee Type
+                    </th>
+
+                    <td>
+                        {{ payment.student_fee.fee_structure.get_fee_type_display }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Amount Paid
+                    </th>
+
+                    <td>
+                        <strong>
+                            K{{ payment.amount|floatformat:2 }}
+                        </strong>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Payment Method
+                    </th>
+
+                    <td>
+                        {{ payment.get_payment_method_display }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Reference
+                    </th>
+
+                    <td>
+
+                        {% if payment.reference %}
+                            {{ payment.reference }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Outstanding Balance
+                    </th>
+
+                    <td>
+                        <strong>
+                            K{{ payment.student_fee.balance|floatformat:2 }}
+                        </strong>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Recorded By
+                    </th>
+
+                    <td>
+                        {{ payment.recorded_by.username }}
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        {% if payment.remarks %}
+
+        <div class="mb-4">
+
+            <h6>
+                Remarks
+            </h6>
+
+            <p>
+                {{ payment.remarks }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <hr>
+
+
+        <div class="text-center mt-4">
+
+            <p class="mb-1">
+                Thank you for your payment.
+            </p>
+
+            <small>
+                This receipt was generated by SchoolCore.
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+.receipt-card {
+    background: white;
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+
+@media print {
+
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+
+
+    body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+
+    .no-print {
+        display: none !important;
+    }
+
+
+    .receipt-page {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+
+    .receipt-card {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 10mm !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+
+    table {
+        page-break-inside: avoid !important;
+    }
+
+
+    tr {
+        page-break-inside: avoid !important;
+    }
+
+
+    h2,
+    h5 {
+        page-break-after: avoid !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}

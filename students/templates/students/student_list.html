@@ -19,6 +19,141 @@
 
 </div>
 
+
+<!-- Search and Filters -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <form method="get">
+
+            <div class="row g-3">
+
+                <!-- Search -->
+
+                <div class="col-md-5">
+
+                    <label class="form-label">
+                        Search Students
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search_query }}"
+                        class="form-control"
+                        placeholder="Student number or name..."
+                    >
+
+                </div>
+
+
+                <!-- Class -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Class
+                    </label>
+
+                    <select
+                        name="class_id"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Classes
+                        </option>
+
+                        {% for school_class in school_classes %}
+
+                        <option
+                            value="{{ school_class.id }}"
+                            {% if selected_class == school_class.id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ school_class.name }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Section -->
+
+                <div class="col-md-2">
+
+                    <label class="form-label">
+                        Section
+                    </label>
+
+                    <select
+                        name="section_id"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Sections
+                        </option>
+
+                        {% for section in sections %}
+
+                        <option
+                            value="{{ section.id }}"
+                            {% if selected_section == section.id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ section.school_class.name }} {{ section.name }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="col-md-2 d-flex align-items-end">
+
+                    <div class="d-flex gap-2 w-100">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary flex-grow-1"
+                        >
+                            Filter
+                        </button>
+
+                        <a
+                            href="{% url 'student_list' %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Clear
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Student Table -->
+
 <div class="card shadow-sm">
 
     <div class="card-body">
@@ -28,6 +163,7 @@
             <table class="table table-hover align-middle">
 
                 <thead class="table-dark">
+
                     <tr>
                         <th>Student Number</th>
                         <th>Name</th>
@@ -36,7 +172,9 @@
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
+
                 </thead>
+
 
                 <tbody>
 
@@ -63,34 +201,48 @@
                         </td>
 
                         <td>
+
                             {% if student.is_active %}
+
                                 <span class="badge bg-success">
                                     Active
                                 </span>
+
                             {% else %}
+
                                 <span class="badge bg-secondary">
                                     Inactive
                                 </span>
+
                             {% endif %}
+
                         </td>
 
+
                         <td>
-    <a
-        href="{% url 'student_detail' student.id %}"
-        class="btn btn-sm btn-outline-primary"
-    >
-        View Profile
-    </a>
-</td>
+
+                            <a
+                                href="{% url 'student_detail' student.id %}"
+                                class="btn btn-sm btn-outline-primary"
+                            >
+                                View Profile
+                            </a>
+
+                        </td>
 
                     </tr>
 
                     {% empty %}
 
                     <tr>
-                        <td colspan="6" class="text-center">
+
+                        <td
+                            colspan="6"
+                            class="text-center text-muted py-4"
+                        >
                             No students found.
                         </td>
+
                     </tr>
 
                     {% endfor %}
@@ -98,6 +250,115 @@
                 </tbody>
 
             </table>
+
+        </div>
+
+
+        <!-- Pagination -->
+
+        {% if page_obj.has_other_pages %}
+
+        <nav
+            aria-label="Student pagination"
+            class="mt-4"
+        >
+
+            <ul class="pagination justify-content-center">
+
+
+                {% if page_obj.has_previous %}
+
+                <li class="page-item">
+
+                    <a
+                        class="page-link"
+                        href="?search={{ search_query }}&class_id={{ selected_class }}&section_id={{ selected_section }}&page={{ page_obj.previous_page_number }}"
+                    >
+                        Previous
+                    </a>
+
+                </li>
+
+                {% else %}
+
+                <li class="page-item disabled">
+
+                    <span class="page-link">
+                        Previous
+                    </span>
+
+                </li>
+
+                {% endif %}
+
+
+                {% for num in page_obj.paginator.page_range %}
+
+                    {% if page_obj.number == num %}
+
+                    <li class="page-item active">
+
+                        <span class="page-link">
+                            {{ num }}
+                        </span>
+
+                    </li>
+
+                    {% else %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="?search={{ search_query }}&class_id={{ selected_class }}&section_id={{ selected_section }}&page={{ num }}"
+                        >
+                            {{ num }}
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                {% endfor %}
+
+
+                {% if page_obj.has_next %}
+
+                <li class="page-item">
+
+                    <a
+                        class="page-link"
+                        href="?search={{ search_query }}&class_id={{ selected_class }}&section_id={{ selected_section }}&page={{ page_obj.next_page_number }}"
+                    >
+                        Next
+                    </a>
+
+                </li>
+
+                {% else %}
+
+                <li class="page-item disabled">
+
+                    <span class="page-link">
+                        Next
+                    </span>
+
+                </li>
+
+                {% endif %}
+
+
+            </ul>
+
+        </nav>
+
+        {% endif %}
+
+
+        <div class="text-center text-muted small mt-2">
+
+            Page {{ page_obj.number }}
+            of {{ page_obj.paginator.num_pages }}
 
         </div>
 
