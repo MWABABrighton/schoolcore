@@ -1,9 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from students.models import Student
 from teachers.models import Teacher
 from academics.models import SchoolClass, Subject
 from attendance.models import Attendance
+
+
+
+@login_required
+
 
 
 def dashboard_home(request):

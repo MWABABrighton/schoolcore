@@ -111,3 +111,52 @@ class TeachingAssignment(models.Model):
             f"{self.section} - "
             f"{self.academic_year}"
         )
+
+
+class ClassTeacherAssignment(models.Model):
+
+    teacher = models.ForeignKey(
+        Teacher,
+        on_delete=models.PROTECT,
+        related_name="class_teacher_assignments",
+    )
+
+    section = models.ForeignKey(
+        "academics.Section",
+        on_delete=models.PROTECT,
+        related_name="class_teacher_assignments",
+    )
+
+    academic_year = models.ForeignKey(
+        "academics.AcademicYear",
+        on_delete=models.PROTECT,
+        related_name="class_teacher_assignments",
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "section",
+                    "academic_year",
+                ],
+                name="unique_class_teacher_per_section_year",
+            )
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.teacher} - "
+            f"{self.section} - "
+            f"{self.academic_year}"
+        )

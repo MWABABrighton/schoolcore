@@ -44,12 +44,14 @@
             School Management & Academic Information System
         </span>
 
-        <a
-            href="/admin/"
-            class="btn btn-outline-light btn-sm"
-        >
-            Admin
-        </a>
+
+        {% if user.is_authenticated %}
+
+            <span class="text-white me-3">
+                {{ user.first_name }} {{ user.last_name }}
+            </span>
+
+        {% endif %}
 
     </div>
 
@@ -98,7 +100,7 @@
                 <!-- Teachers -->
 
                 <a
-                    href="/admin/teachers/teacher/"
+                    href="{% url 'teacher_list' %}"
                     class="nav-link text-white"
                 >
                     Teachers
@@ -143,6 +145,29 @@
                 >
                     Reports
                 </a>
+
+
+                <!-- Logout -->
+
+                <li class="nav-item">
+
+                    <form
+                        method="post"
+                        action="{% url 'logout' %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="nav-link text-white border-0 bg-transparent"
+                        >
+                            Logout
+                        </button>
+
+                    </form>
+
+                </li>
 
 
             </div>

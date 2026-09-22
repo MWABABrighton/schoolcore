@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Class Teacher | SchoolCore{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h1>Assign Class Teacher</h1>
+
+    <p class="text-muted">
+        Assign a teacher to take responsibility for a class.
+    </p>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% if form.errors %}
+
+                <div class="alert alert-danger">
+
+                    Please correct the errors below.
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="row g-3">
+
+
+                <!-- Teacher -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Teacher
+                    </label>
+
+                    {{ form.teacher }}
+
+                    {% if form.teacher.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.teacher.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Class -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Class & Section
+                    </label>
+
+                    {{ form.section }}
+
+                    {% if form.section.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.section.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Academic Year -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Academic Year
+                    </label>
+
+                    {{ form.academic_year }}
+
+                    {% if form.academic_year.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.academic_year.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Active -->
+
+                <div class="col-md-12">
+
+                    <div class="form-check">
+
+                        {{ form.is_active }}
+
+                        <label class="form-check-label">
+                            Active Assignment
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="mt-4">
+
+                <a
+                    href="{% url 'teacher_list' %}"
+                    class="btn btn-outline-secondary"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-dark"
+                >
+                    Assign Class Teacher
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
