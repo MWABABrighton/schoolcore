@@ -30,11 +30,7 @@ urlpatterns = [
     name="payment_detail",
     ),
 
-    path(
-    "student-fees/new/",
-    views.create_student_fee,
-    name="create_student_fee",
-    ),
+    
 
     path(
     "fee-structures/new/",

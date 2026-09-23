@@ -1,11 +1,18 @@
 from accounts.decorators import role_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import FeeStructureForm, PaymentForm, StudentFeeForm
+from academics.models import SchoolClass, Section
+from students.models import Enrolment
+
+from .forms import FeeStructureForm, PaymentForm
 from .models import FeeStructure, Payment, StudentFee
+from .services import allocate_fees_for_enrolment
 
 
 def finance_dashboard(request):
+
+    class_id = request.GET.get("class_id", "")
+    section_id = request.GET.get("section_id", "")
 
     student_fees = (
         StudentFee.objects
@@ -15,11 +22,23 @@ def finance_dashboard(request):
             "academic_year",
             "fee_structure",
         )
-        .order_by(
-            "student__last_name",
-            "student__first_name",
-        )
     )
+
+    if class_id:
+        student_fees = student_fees.filter(
+            fee_structure__school_class_id=class_id
+        )
+
+    if section_id:
+        student_fees = student_fees.filter(
+            student__enrolments__section_id=section_id,
+            student__enrolments__is_active=True,
+        )
+
+    student_fees = student_fees.order_by(
+        "student__last_name",
+        "student__first_name",
+    ).distinct()
 
     total_due = sum(
         fee.amount_due for fee in student_fees
@@ -33,11 +52,26 @@ def finance_dashboard(request):
         fee.balance for fee in student_fees
     )
 
+    school_classes = SchoolClass.objects.all().order_by(
+        "name"
+    )
+
+    sections = Section.objects.select_related(
+        "school_class"
+    ).order_by(
+        "school_class__name",
+        "name",
+    )
+
     context = {
         "student_fees": student_fees,
         "total_due": total_due,
         "total_paid": total_paid,
         "total_balance": total_balance,
+        "school_classes": school_classes,
+        "sections": sections,
+        "selected_class": class_id,
+        "selected_section": section_id,
     }
 
     return render(
@@ -56,7 +90,21 @@ def create_fee_structure(request):
 
         if form.is_valid():
 
-            form.save()
+            fee_structure = form.save()
+
+            # Automatically create StudentFee accounts
+            # for existing students when a Tuition fee
+            # structure is created after enrolment.
+            if fee_structure.fee_type == "TUITION":
+
+                enrolments = Enrolment.objects.filter(
+                    academic_year=fee_structure.academic_year,
+                    section__school_class=fee_structure.school_class,
+                    is_active=True,
+                )
+
+                for enrolment in enrolments:
+                    allocate_fees_for_enrolment(enrolment)
 
             return redirect("finance_dashboard")
 
@@ -187,31 +235,5 @@ def payment_detail(request, payment_id):
         "finance/payment_detail.html",
         {
             "payment": payment,
-        },
-    )
-
-
-@role_required("DIRECTOR", "ACCOUNTANT")
-def create_student_fee(request):
-
-    if request.method == "POST":
-
-        form = StudentFeeForm(request.POST)
-
-        if form.is_valid():
-
-            form.save()
-
-            return redirect("finance_dashboard")
-
-    else:
-
-        form = StudentFeeForm()
-
-    return render(
-        request,
-        "finance/student_fee_form.html",
-        {
-            "form": form,
         },
     )

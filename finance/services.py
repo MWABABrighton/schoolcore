@@ -3,31 +3,28 @@ from .models import FeeStructure, StudentFee
 
 def allocate_fees_for_enrolment(enrolment):
     """
-    Automatically allocate all active fee structures
-    applicable to the student's class and academic year.
+    Create the student's fee account for the academic year
+    using the applicable tuition fee structure.
     """
 
-    fee_structures = FeeStructure.objects.filter(
+    fee_structure = FeeStructure.objects.filter(
         academic_year=enrolment.academic_year,
         school_class=enrolment.section.school_class,
+        fee_type="TUITION",
         is_active=True,
+    ).first()
+
+    if not fee_structure:
+        return None
+
+    student_fee, created = StudentFee.objects.get_or_create(
+        student=enrolment.student,
+        academic_year=enrolment.academic_year,
+        defaults={
+            "fee_structure": fee_structure,
+            "amount_due": fee_structure.amount,
+            "is_active": True,
+        },
     )
 
-    created_fees = []
-
-    for fee_structure in fee_structures:
-
-        student_fee, created = StudentFee.objects.get_or_create(
-            student=enrolment.student,
-            academic_year=enrolment.academic_year,
-            fee_structure=fee_structure,
-            defaults={
-                "amount_due": fee_structure.amount,
-                "is_active": True,
-            },
-        )
-
-        if created:
-            created_fees.append(student_fee)
-
-    return created_fees
+    return student_fee

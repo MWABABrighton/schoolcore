@@ -19,27 +19,25 @@
     <div>
 
         <a
-    href="{% url 'create_fee_structure' %}"
-    class="btn btn-outline-primary me-2"
->
-    + Fee Structure
-</a>
+            href="{% url 'create_fee_structure' %}"
+            class="btn btn-outline-primary me-2"
+        >
+            + Fee Structure
+        </a>
 
+        <a
+            href="{% url 'payment_list' %}"
+            class="btn btn-outline-secondary me-2"
+        >
+            Payment History
+        </a>
 
-
-<a
-    href="{% url 'payment_list' %}"
-    class="btn btn-outline-secondary me-2"
->
-    Payment History
-</a>
-
-<a
-    href="{% url 'record_payment' %}"
-    class="btn btn-primary"
->
-    + Record Payment
-</a>
+        <a
+            href="{% url 'record_payment' %}"
+            class="btn btn-primary"
+        >
+            + Record Payment
+        </a>
 
     </div>
 
@@ -109,6 +107,116 @@
             </div>
 
         </div>
+
+    </div>
+
+</div>
+
+
+<!-- Payment Filters -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <form method="get">
+
+            <div class="row g-3 align-items-end">
+
+
+                <!-- Class -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Class
+                    </label>
+
+                    <select
+                        name="class_id"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Classes
+                        </option>
+
+                        {% for school_class in school_classes %}
+
+                            <option
+                                value="{{ school_class.id }}"
+                                {% if selected_class == school_class.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ school_class.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Section -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Section
+                    </label>
+
+                    <select
+                        name="section_id"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Sections
+                        </option>
+
+                        {% for section in sections %}
+
+                            <option
+                                value="{{ section.id }}"
+                                {% if selected_section == section.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ section.school_class.name }}{{ section.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="col-md-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-dark"
+                    >
+                        Filter
+                    </button>
+
+                    <a
+                        href="{% url 'finance_dashboard' %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Clear
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
 
     </div>
 

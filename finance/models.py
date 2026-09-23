@@ -50,6 +50,18 @@ class FeeStructure(models.Model):
         auto_now=True,
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "academic_year",
+                    "school_class",
+                    "fee_type",
+                ],
+                name="unique_fee_structure_per_class_year_type",
+            )
+        ]
+
     def __str__(self):
         return (
             f"{self.academic_year} - "
@@ -102,9 +114,8 @@ class StudentFee(models.Model):
                 fields=[
                     "student",
                     "academic_year",
-                    "fee_structure",
                 ],
-                name="unique_student_fee_structure",
+                name="unique_student_fee_per_year",
             )
         ]
 

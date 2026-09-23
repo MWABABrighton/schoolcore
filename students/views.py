@@ -4,10 +4,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from academics.models import SchoolClass, Section
 from .forms import StudentForm
-from .models import Enrolment,Student
+from .models import Enrolment, Student
 
 
 def student_list(request):
+
     search_query = request.GET.get(
         "search",
         "",
@@ -29,15 +30,21 @@ def student_list(request):
 
     # Search
     if search_query:
-        students = students.filter(
-            Q(student_number__icontains=search_query)
-            | Q(first_name__icontains=search_query)
-            | Q(middle_name__icontains=search_query)
-            | Q(last_name__icontains=search_query)
-        )
+
+        search_terms = search_query.split()
+
+        for term in search_terms:
+
+            students = students.filter(
+                Q(student_number__icontains=term)
+                | Q(first_name__icontains=term)
+                | Q(middle_name__icontains=term)
+                | Q(last_name__icontains=term)
+            )
 
     # Filter by class
     if class_id:
+
         students = students.filter(
             enrolments__section__school_class_id=class_id,
             enrolments__is_active=True,
@@ -45,6 +52,7 @@ def student_list(request):
 
     # Filter by section
     if section_id:
+
         students = students.filter(
             enrolments__section_id=section_id,
             enrolments__is_active=True,
@@ -132,6 +140,7 @@ def student_create(request):
 
 
 def student_detail(request, student_id):
+
     student = get_object_or_404(
         Student,
         id=student_id,

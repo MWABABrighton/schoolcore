@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import FeeStructure, Payment, StudentFee
+from .models import FeeStructure, Payment
 
 
 class FeeStructureForm(forms.ModelForm):
@@ -72,17 +72,3 @@ class PaymentForm(forms.ModelForm):
                 )
 
         return amount
-
-
-class StudentFeeForm(forms.ModelForm):
-
-    class Meta:
-        model = StudentFee
-
-        fields = [
-            "student",
-            "academic_year",
-            "fee_structure",
-            "amount_due",
-            "is_active",
-        ]

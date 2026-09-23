@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-3">Assessments</h2>
+
+    <p class="text-muted">
+        Manage end-of-term examinations and student results.
+    </p>
+
+    <div class="card">
+        <div class="card-body">
+
+            <h5 class="card-title">
+                End-of-Term Examinations
+            </h5>
+
+            <p class="card-text">
+                Subject teachers will enter student marks,
+                while class teachers will generate report cards.
+            </p>
+
+            <a
+                href="{% url 'create_examination' %}"
+                class="btn btn-primary"
+            >
+                Create Examination
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
