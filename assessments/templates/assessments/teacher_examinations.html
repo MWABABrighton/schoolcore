@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Examinations</h3>
+
+        <a href="{% url 'create_examination' %}" class="btn btn-primary">
+            Create Examination
+        </a>
+    </div>
+
+    {% if examinations %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Academic Year</th>
+                    <th>Term</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Exam Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for examination in examinations %}
+
+                <tr>
+                    <td>
+                        {{ examination.academic_year }}
+                    </td>
+
+                    <td>
+                        {{ examination.get_term_display }}
+                    </td>
+
+                    <td>
+                        {{ examination.class_section }}
+                    </td>
+
+                    <td>
+                        {{ examination.subject }}
+                    </td>
+
+                    <td>
+                        {{ examination.exam_date|default:"Not set" }}
+                    </td>
+
+                    <td>
+                        <a
+                            href="{% url 'enter_marks' examination.id %}"
+                            class="btn btn-sm btn-success"
+                        >
+                            Enter Marks
+                        </a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+        No examinations are available for you.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

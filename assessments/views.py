@@ -17,14 +17,68 @@ def assessment_home(request):
     )
 
 
-@role_required("DIRECTOR", "HEAD")
+@role_required("TEACHER", "HEAD", "DIRECTOR")
 def create_examination(request):
 
     if request.method == "POST":
 
-        form = ExaminationForm(request.POST)
+        form = ExaminationForm(
+            request.POST,
+            user=request.user,
+        )
 
         if form.is_valid():
+
+            # Teachers can only create examinations
+            # for subjects and classes assigned to them.
+            if request.user.role == "TEACHER":
+
+                teacher = getattr(
+                    request.user,
+                    "teacher_profile",
+                    None,
+                )
+
+                if teacher is None:
+
+                    return render(
+                        request,
+                        "assessments/access_denied.html",
+                        {
+                            "message": (
+                                "Your user account is not linked "
+                                "to a teacher profile."
+                            ),
+                        },
+                        status=403,
+                    )
+
+                assignment_exists = (
+                    teacher.teaching_assignments
+                    .filter(
+                        subject=form.cleaned_data["subject"],
+                        section=form.cleaned_data["class_section"],
+                        academic_year=form.cleaned_data[
+                            "academic_year"
+                        ],
+                        is_active=True,
+                    )
+                    .exists()
+                )
+
+                if not assignment_exists:
+
+                    return render(
+                        request,
+                        "assessments/access_denied.html",
+                        {
+                            "message": (
+                                "You are not assigned to teach "
+                                "this subject and class."
+                            ),
+                        },
+                        status=403,
+                    )
 
             form.save()
 
@@ -34,7 +88,9 @@ def create_examination(request):
 
     else:
 
-        form = ExaminationForm()
+        form = ExaminationForm(
+            user=request.user,
+        )
 
     return render(
         request,
@@ -45,32 +101,8 @@ def create_examination(request):
     )
 
 
-@role_required("TEACHER")
+@role_required("TEACHER", "HEAD", "DIRECTOR")
 def teacher_examinations(request):
-
-    teacher = getattr(
-        request.user,
-        "teacher_profile",
-        None,
-    )
-
-    if teacher is None:
-
-        return render(
-            request,
-            "assessments/access_denied.html",
-            {
-                "message": (
-                    "Your user account is not linked "
-                    "to a teacher profile."
-                ),
-            },
-            status=403,
-        )
-
-    assignments = teacher.teaching_assignments.filter(
-        is_active=True,
-    )
 
     examinations = (
         Examination.objects
@@ -83,39 +115,69 @@ def teacher_examinations(request):
             "subject",
         )
         .order_by(
-            "academic_year__year",
+            "-academic_year__year",
             "term",
             "class_section__name",
             "subject__name",
         )
     )
 
-    allowed_examinations = []
+    # Teachers can only see examinations
+    # for subjects and classes assigned to them.
+    if request.user.role == "TEACHER":
 
-    for examination in examinations:
+        teacher = getattr(
+            request.user,
+            "teacher_profile",
+            None,
+        )
 
-        assigned = assignments.filter(
-            subject=examination.subject,
-            section=examination.class_section,
-            academic_year=examination.academic_year,
-        ).exists()
+        if teacher is None:
 
-        if assigned:
-
-            allowed_examinations.append(
-                examination
+            return render(
+                request,
+                "assessments/access_denied.html",
+                {
+                    "message": (
+                        "Your user account is not linked "
+                        "to a teacher profile."
+                    ),
+                },
+                status=403,
             )
+
+        assignments = teacher.teaching_assignments.filter(
+            is_active=True,
+        )
+
+        allowed_examinations = []
+
+        for examination in examinations:
+
+            assigned = assignments.filter(
+                subject=examination.subject,
+                section=examination.class_section,
+                academic_year=examination.academic_year,
+            ).exists()
+
+            if assigned:
+
+                allowed_examinations.append(
+                    examination
+                )
+
+        examinations = allowed_examinations
 
     return render(
         request,
         "assessments/teacher_examinations.html",
         {
-            "examinations": allowed_examinations,
+            "examinations": examinations,
         },
     )
 
 
-@role_required("TEACHER")
+@role_required("TEACHER", "HEAD", "DIRECTOR")
 def enter_marks(request, examination_id):
 
     examination = get_object_or_404(
@@ -128,47 +190,57 @@ def enter_marks(request, examination_id):
         is_active=True,
     )
 
-    teacher = getattr(
-        request.user,
-        "teacher_profile",
-        None,
-    )
+    # Teachers must be assigned to the
+    # subject, class and academic year.
+    if request.user.role == "TEACHER":
 
-    if teacher is None:
-
-        return render(
-            request,
-            "assessments/access_denied.html",
-            {
-                "message": (
-                    "Your user account is not linked "
-                    "to a teacher profile."
-                ),
-            },
-            status=403,
+        teacher = getattr(
+            request.user,
+            "teacher_profile",
+            None,
         )
 
-    assignment_exists = teacher.teaching_assignments.filter(
-        subject=examination.subject,
-        section=examination.class_section,
-        academic_year=examination.academic_year,
-        is_active=True,
-    ).exists()
+        if teacher is None:
 
-    if not assignment_exists:
+            return render(
+                request,
+                "assessments/access_denied.html",
+                {
+                    "message": (
+                        "Your user account is not linked "
+                        "to a teacher profile."
+                    ),
+                },
+                status=403,
+            )
 
-        return render(
-            request,
-            "assessments/access_denied.html",
-            {
-                "message": (
-                    "You are not assigned to teach "
-                    "this subject and class."
-                ),
-            },
-            status=403,
+        assignment_exists = (
+            teacher.teaching_assignments
+            .filter(
+                subject=examination.subject,
+                section=examination.class_section,
+                academic_year=examination.academic_year,
+                is_active=True,
+            )
+            .exists()
         )
 
+        if not assignment_exists:
+
+            return render(
+                request,
+                "assessments/access_denied.html",
+                {
+                    "message": (
+                        "You are not assigned to teach "
+                        "this subject and class."
+                    ),
+                },
+                status=403,
+            )
+
+    # Head Teacher and Director are allowed
+    # to enter and edit marks for all examinations.
     enrolments = (
         Enrolment.objects
         .filter(
@@ -205,6 +277,8 @@ def enter_marks(request, examination_id):
                 "",
             ).strip()
 
+            # Leave the existing result unchanged
+            # when no mark was entered.
             if marks_value == "":
                 continue
 
@@ -241,4 +315,3 @@ def enter_marks(request, examination_id):
             "existing_results": existing_results,
         },
     )
-    
