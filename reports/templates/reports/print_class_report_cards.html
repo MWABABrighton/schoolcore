@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Class Report Cards
+    </title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .report-card {
+            min-height: 90vh;
+        }
+
+        .report-card:not(:last-child) {
+            page-break-after: always;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .student-info {
+            margin-bottom: 30px;
+        }
+
+        .student-info p {
+            margin: 6px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .summary {
+            margin-top: 25px;
+        }
+
+        .summary p {
+            margin: 6px 0;
+        }
+
+        @media print {
+
+            body {
+                margin: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    {% for report in report_cards %}
+
+    <div class="report-card">
+
+        <h1>
+            Student Report Card
+        </h1>
+
+
+        <div class="student-info">
+
+            <p>
+                <strong>Student Number:</strong>
+                {{ report.student.student_number }}
+            </p>
+
+            <p>
+                <strong>Name:</strong>
+                {{ report.student.first_name }}
+                {{ report.student.middle_name }}
+                {{ report.student.last_name }}
+            </p>
+
+            <p>
+                <strong>Gender:</strong>
+                {{ report.student.get_gender_display }}
+            </p>
+
+            <p>
+                <strong>Date of Birth:</strong>
+                {{ report.student.date_of_birth }}
+            </p>
+
+            <p>
+                <strong>Academic Year:</strong>
+                {{ report.report_academic_year }}
+            </p>
+
+            <p>
+                <strong>Term:</strong>
+                {{ report.report_term }}
+            </p>
+
+            <p>
+                <strong>Class:</strong>
+                {{ report.report_class }}
+            </p>
+
+        </div>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Subject
+                    </th>
+
+                    <th>
+                        Marks
+                    </th>
+
+                    <th>
+                        Grade
+                    </th>
+
+                    <th>
+                        Remarks
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for result in report.results %}
+
+                <tr>
+
+                    <td>
+                        {{ result.examination.subject.name }}
+                    </td>
+
+                    <td>
+                        {{ result.marks }}
+                    </td>
+
+                    <td>
+                        {{ result.grade }}
+                    </td>
+
+                    <td>
+                        {{ result.remarks|default:"-" }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="4">
+                        No results available.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <div class="summary">
+
+            <p>
+                <strong>Total Marks:</strong>
+                {{ report.total_marks|default:"0" }}
+            </p>
+
+            <p>
+                <strong>Average Marks:</strong>
+                {{ report.average_marks|default:"0.00"|floatformat:2 }}
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</body>
+
+</html>

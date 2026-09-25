@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3>Academics</h3>
+            <p class="text-muted mb-0">
+                Manage academic years, classes, sections and subjects.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Academic Years -->
+    <div class="card mb-4">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Academic Years</strong>
+
+            <a href="{% url 'create_academic_year' %}"
+               class="btn btn-primary btn-sm">
+                Add Academic Year
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-bordered table-striped mb-0">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Year</th>
+                        <th>Current</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for academic_year in academic_years %}
+
+                    <tr>
+                        <td>{{ academic_year.year }}</td>
+
+                        <td>
+                            {% if academic_year.is_current %}
+                                <span class="badge bg-success">
+                                    Current
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    No
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2" class="text-center text-muted">
+                            No academic years found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+
+    <!-- Classes -->
+    <div class="card mb-4">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Classes</strong>
+
+            <a href="{% url 'create_class' %}"
+               class="btn btn-primary btn-sm">
+                Add Class
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-bordered table-striped mb-0">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Class</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for school_class in classes %}
+
+                    <tr>
+                        <td>{{ school_class.name }}</td>
+                        <td>{{ school_class.description|default:"-" }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2" class="text-center text-muted">
+                            No classes found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+
+    <!-- Sections -->
+    <div class="card mb-4">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Sections</strong>
+
+            <a href="{% url 'create_section' %}"
+               class="btn btn-primary btn-sm">
+                Add Section
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-bordered table-striped mb-0">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Class</th>
+                        <th>Section</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for section in sections %}
+
+                    <tr>
+                        <td>{{ section.school_class.name }}</td>
+                        <td>{{ section.name }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2" class="text-center text-muted">
+                            No sections found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+
+    <!-- Subjects -->
+    <div class="card mb-4">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Subjects</strong>
+
+            <a href="{% url 'create_subject' %}"
+               class="btn btn-primary btn-sm">
+                Add Subject
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-bordered table-striped mb-0">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Code</th>
+                        <th>Subject</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for subject in subjects %}
+
+                    <tr>
+                        <td>{{ subject.code }}</td>
+                        <td>{{ subject.name }}</td>
+                        <td>{{ subject.description|default:"-" }}</td>
+
+                        <td>
+                            {% if subject.is_active %}
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    Inactive
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No subjects found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

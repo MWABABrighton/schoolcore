@@ -110,7 +110,7 @@
                 <!-- Academics -->
 
                 <a
-                    href="/admin/academics/"
+                    href="{% url 'academics_home' %}"
                     class="nav-link text-white"
                 >
                     Academics
@@ -118,15 +118,9 @@
 
 
                 <!-- Attendance -->
-
-                <a
-                    href="/admin/attendance/attendance/"
-                    class="nav-link text-white"
-                >
-                    Attendance
-                </a>
-
-
+<a href="{% url 'attendance_home' %}" class="nav-link text-white">
+    Attendance
+</a>
                 <!-- Assessments -->
 
             <a href="/assessments/" class="nav-link text-white">

@@ -1,12 +1,37 @@
-from django.contrib.auth.decorators import user_passes_test
+from functools import wraps
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 
 def role_required(*allowed_roles):
 
-    def check_role(user):
-        return (
-            user.is_authenticated
-            and user.role in allowed_roles
-        )
+    def decorator(view_func):
 
-    return user_passes_test(check_role)
+        @wraps(view_func)
+        @login_required
+        def wrapper(request, *args, **kwargs):
+
+            if request.user.role not in allowed_roles:
+
+                return render(
+                    request,
+                    "reports/access_denied.html",
+                    {
+                        "message": (
+                            "You do not have permission "
+                            "to access this page."
+                        ),
+                    },
+                    status=403,
+                )
+
+            return view_func(
+                request,
+                *args,
+                **kwargs,
+            )
+
+        return wrapper
+
+    return decorator

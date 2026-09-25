@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-3">
+        Reports
+    </h2>
+
+    <p class="text-muted">
+        Select a report option below.
+    </p>
+
+
+    <div class="row">
+
+        <div class="col-md-6 mb-4">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        My Class Reports
+                    </h5>
+
+                    <p class="card-text">
+                        View and manage report cards for
+                        your assigned classes.
+                    </p>
+
+                    <a
+                        href="{% url 'my_class_reports' %}"
+                        class="btn btn-primary"
+                    >
+                        My Class Reports
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 mb-4">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Student Report Card
+                    </h5>
+
+                    <p class="card-text">
+                        View an individual student's
+                        academic report card.
+                    </p>
+
+                    <span class="text-muted">
+                        Select a student from My Class Reports.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

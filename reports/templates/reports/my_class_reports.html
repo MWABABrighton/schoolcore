@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-3">
+        My Class Reports
+    </h2>
+
+    <p class="text-muted">
+        Select one of your assigned classes to manage report cards.
+    </p>
+
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>
+                                Academic Year
+                            </th>
+
+                            <th>
+                                Class
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for assignment in class_assignments %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ assignment.academic_year }}
+                            </td>
+
+                            <td>
+                                {{ assignment.section }}
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="{% url 'class_report_cards' assignment.id %}"
+                                    class="btn btn-primary btn-sm"
+                                >
+                                    View Report Cards
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="text-center"
+                            >
+                                You have no active class-teacher
+                                assignments.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

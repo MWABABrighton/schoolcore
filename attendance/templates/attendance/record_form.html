@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h3 class="mb-4">Record Attendance</h3>
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Academic Year
+                        </label>
+
+                        {{ form.academic_year }}
+
+                        {% if form.academic_year.errors %}
+                            <div class="text-danger">
+                                {{ form.academic_year.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Class / Section
+                        </label>
+
+                        {{ form.section }}
+
+                        {% if form.section.errors %}
+                            <div class="text-danger">
+                                {{ form.section.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Date
+                        </label>
+
+                        {{ form.date }}
+
+                        {% if form.date.errors %}
+                            <div class="text-danger">
+                                {{ form.date.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Recorded By
+                        </label>
+
+                        {{ form.recorded_by_name }}
+
+                        {% if form.recorded_by_name.errors %}
+                            <div class="text-danger">
+                                {{ form.recorded_by_name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Continue
+                </button>
+
+                <a
+                    href="{% url 'attendance_home' %}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

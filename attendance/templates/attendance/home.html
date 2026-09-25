@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Attendance</h3>
+
+        <a href="{% url 'record_attendance' %}" class="btn btn-primary">
+            Record Attendance
+        </a>
+    </div>
+
+    {% if attendances %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Academic Year</th>
+                    <th>Class</th>
+                    <th>Date</th>
+                    <th>Recorded By</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for attendance in attendances %}
+
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>
+                        {{ attendance.academic_year.year }}
+                    </td>
+
+                    <td>
+                        {{ attendance.section }}
+                    </td>
+
+                    <td>
+                        {{ attendance.date|date:"d M Y" }}
+                    </td>
+
+                    <td>
+                        {{ attendance.recorded_by_name }}
+                    </td>
+
+                    <td>
+                        <a
+                            href="{% url 'attendance_edit' attendance.id %}"
+                            class="btn btn-sm btn-secondary"
+                        >
+                            View / Edit
+                        </a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+        No attendance records have been recorded yet.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-3">
+        Class Report Cards
+    </h2>
+
+
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                {{ assignment.section }}
+            </h5>
+
+            <p class="mb-1">
+                <strong>Academic Year:</strong>
+                {{ assignment.academic_year }}
+            </p>
+
+            <p class="mb-0">
+                <strong>Class Teacher:</strong>
+                {{ assignment.teacher.first_name }}
+                {{ assignment.teacher.last_name }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Select Term
+            </h5>
+
+            <form method="get">
+
+                <div class="row align-items-end">
+
+                    <div class="col-md-4">
+
+                        <label
+                            for="term"
+                            class="form-label"
+                        >
+                            Term
+                        </label>
+
+                        <select
+                            name="term"
+                            id="term"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Select Term
+                            </option>
+
+                            <option
+                                value="TERM1"
+                                {% if selected_term == "TERM1" %}selected{% endif %}
+                            >
+                                Term 1
+                            </option>
+
+                            <option
+                                value="TERM2"
+                                {% if selected_term == "TERM2" %}selected{% endif %}
+                            >
+                                Term 2
+                            </option>
+
+                            <option
+                                value="TERM3"
+                                {% if selected_term == "TERM3" %}selected{% endif %}
+                            >
+                                Term 3
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Select Term
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+                                        {% if selected_term %}
+
+                    <a
+                        href="{% url 'print_class_report_cards' assignment.id %}?term={{ selected_term }}"
+                        target="_blank"
+                        class="btn btn-success mt-3"
+                    >
+                        Print All Report Cards
+                    </a>
+
+                                             {% endif %}
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Students
+            </h5>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Student Number
+                            </th>
+
+                            <th>
+                                Student Name
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for enrolment in enrolments %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ enrolment.student.student_number }}
+                            </td>
+
+                            <td>
+                                {{ enrolment.student.first_name }}
+                                {{ enrolment.student.middle_name }}
+                                {{ enrolment.student.last_name }}
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="{% url 'student_report_card' enrolment.student.id %}?term={{ selected_term }}&assignment={{ assignment.id }}"
+                                    class="btn btn-primary btn-sm"
+                                >
+                                    View Report Card
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="text-center"
+                            >
+                                No students found in this class.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% url 'my_class_reports' %}"
+        class="btn btn-secondary mt-3"
+    >
+        Back to My Classes
+    </a>
+
+</div>
+
+{% endblock %}
