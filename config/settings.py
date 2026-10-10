@@ -23,14 +23,16 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
+
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(
         "ALLOWED_HOSTS",
-        "localhost,127.0.0.1",
+        "localhost,127.0.0.1,schoolcore-o7zj.onrender.com",
     ).split(",")
     if host.strip()
 ]
+
 
 
 # --------------------------------------------------
