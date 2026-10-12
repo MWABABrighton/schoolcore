@@ -23,15 +23,15 @@
 
     <style>
         :root {
-            --page-bg: #ffffff; /* outer background white */
-            --dark-bg: #212529; /* card accent */
+            --page-bg: #ffffff;
+            --dark-bg: #212529;
             --panel-strong: rgba(255, 255, 255, 0.1);
             --text: #ffffff;
             --muted: rgba(255, 255, 255, 0.72);
             --input-bg: rgba(255, 255, 255, 0.02);
             --border: rgba(255, 255, 255, 0.06);
             --shadow: rgba(0, 0, 0, 0.18);
-            --card-max-width: 360px; /* smaller card so it fits easily */
+            --card-max-width: 360px;
         }
 
         * { box-sizing: border-box; }
@@ -49,7 +49,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px; /* reduced padding so card fits */
+            padding: 16px;
         }
 
         .login-shell {
@@ -63,15 +63,18 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             box-shadow: 0 10px 28px var(--shadow);
-            overflow: visible; /* ensure the card itself doesn't clip content */
+            overflow: visible;
         }
 
         .login-card .card-body {
-            padding: 1rem; /* smaller padding */
-            overflow: visible; /* prevent inner scroll */
+            padding: 1rem;
+            overflow: visible;
         }
 
-        .brand { text-align: center; margin-bottom: 0.8rem; }
+        .brand {
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
 
         .brand-mark {
             width: 46px;
@@ -92,18 +95,45 @@
             color: var(--text);
         }
 
-        .brand p { margin: 4px 0 0; color: var(--muted); font-size: 0.82rem; }
+        .brand p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
 
-        .welcome-title { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0 0 0.2rem; }
-        .welcome-subtitle { color: var(--muted); margin: 0 0 0.9rem; font-size: 0.85rem; }
+        .welcome-title, .welcome-subtitle {
+            display: none; /* removed from UI */
+        }
 
-        .alert { border: none; border-radius: 8px; background: rgba(220,53,69,0.12); color: #ffd7dc; padding: 0.6rem 0.8rem; margin-bottom: 0.85rem; font-size: 0.9rem; }
+        .alert {
+            border: none;
+            border-radius: 8px;
+            background: rgba(220,53,69,0.12);
+            color: #ffd7dc;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 0.85rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
 
-        .form-label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.92); margin-bottom: 0.4rem; }
+        .form-label {
+            display: block;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.92);
+            margin-bottom: 0.4rem;
+        }
 
         .form-control {
-            width: 100%; height: 42px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);
-            background: var(--input-bg); color: var(--text); padding: 0.55rem 0.65rem; font-size: 0.92rem;
+            width: 100%;
+            height: 42px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: var(--input-bg);
+            color: var(--text);
+            padding: 0.55rem 0.65rem;
+            font-size: 0.92rem;
         }
 
         .form-control::placeholder { color: rgba(255,255,255,0.42); }
@@ -112,20 +142,54 @@
         .form-check-input { width: 1rem; height: 1rem; }
         .form-check-label, .secondary-link { color: rgba(255,255,255,0.82); font-size: 0.85rem; }
 
-        .btn-login { width: 100%; height: 42px; background: linear-gradient(180deg,#f4f4f4 0%,#eaeaea 100%); color: var(--dark-bg); border-radius: 8px; font-weight: 700; font-size: 0.95rem; }
+        .btn-login {
+            width: 100%;
+            height: 42px;
+            background: linear-gradient(180deg,#f4f4f4 0%,#eaeaea 100%);
+            color: var(--dark-bg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
         .btn-login:hover { transform: translateY(-1px); }
 
-        .divider { margin: 1rem 0 0.6rem; text-align: center; color: rgba(255,255,255,0.45); font-size: 0.72rem; }
-        .divider::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,0.06); }
-        .divider span { position: relative; display: inline-block; padding: 0 0.5rem; background: transparent; }
+        .divider {
+            margin: 1rem 0 0.6rem;
+            text-align: center;
+            color: rgba(255,255,255,0.45);
+            font-size: 0.72rem;
+            position: relative;
+        }
 
-        .register-text { text-align: center; color: rgba(255,255,255,0.82); font-size: 0.86rem; margin: 0.4rem 0 0; }
+        .divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+        }
 
-        /* If the viewport is extremely short, slightly reduce spacing further */
+        .divider span {
+            position: relative;
+            display: inline-block;
+            padding: 0 0.5rem;
+            background: transparent;
+        }
+
+        .register-text {
+            text-align: center;
+            color: rgba(255,255,255,0.82);
+            font-size: 0.86rem;
+            margin: 0.4rem 0 0;
+        }
+
         @media (max-height: 560px) {
             body { padding: 10px; }
             .brand-mark { width: 40px; height: 40px; }
-            .brand p, .welcome-subtitle { font-size: 0.78rem; }
+            .brand p { font-size: 0.78rem; }
             .login-card .card-body { padding: 0.75rem; }
             .divider { margin-top: 0.8rem; }
         }
@@ -151,9 +215,6 @@
                 <h2>SchoolCore</h2>
                 <p>School Management &amp; Academic Information System</p>
             </div>
-
-            <h4 class="welcome-title">Login</h4>
-            <p class="welcome-subtitle">Welcome back — sign in to continue.</p>
 
             {% if form.errors %}
                 <div class="alert" role="alert">Invalid username or password.</div>
