@@ -22,7 +22,7 @@
     >
 
     <style>
-        /* Make all buttons dark/black */
+        /* Make all buttons dark/black and compact */
         button,
         .btn,
         input[type="submit"],
@@ -31,21 +31,60 @@
             background-color: #000 !important;
             color: #fff !important;
             border-color: #000 !important;
+
+            /* compact sizing */
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.875rem !important;
+            line-height: 1.2 !important;
+
+            /* slight rounding */
+            border-radius: 0.35rem !important;
+
+            /* visual polish */
+            box-shadow: none !important;
+            transition: background-color 120ms ease, transform 80ms ease;
         }
 
-        /* Make nav links and logout button black on hover/click */
-        .nav-link,
-        .nav-item button,
-        .nav-item form button {
+        /* Hover: slightly darker and lift */
+        button:hover,
+        .btn:hover,
+        input[type="submit"]:hover,
+        input[type="button"]:hover,
+        a.btn:hover {
+            background-color: #111 !important;
+            transform: translateY(-1px) !important;
+            color: #fff !important;
+        }
+
+        /* Active / focus: a little deeper */
+        button:active,
+        .btn:active,
+        input[type="submit"]:active,
+        input[type="button"]:active,
+        a.btn:active,
+        button:focus,
+        .btn:focus,
+        input[type="submit"]:focus,
+        input[type="button"]:focus,
+        a.btn:focus {
+            background-color: #222 !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Ensure the logout button (a button with .nav-link) looks like the other buttons */
+        button.nav-link {
             background-color: #000 !important;
             color: #fff !important;
             border: none !important;
+            padding: 0.25rem 0.5rem !important;
+            border-radius: 0.35rem !important;
+            transition: background-color 120ms ease, transform 80ms ease;
         }
 
-        .nav-link:hover,
-        .nav-item button:hover,
-        .nav-item form button:hover {
+        button.nav-link:hover {
             background-color: #111 !important;
+            transform: translateY(-1px) !important;
             color: #fff !important;
         }
     </style>
