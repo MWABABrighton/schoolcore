@@ -23,6 +23,7 @@
 
     <style>
         :root {
+            --page-bg: #ffffff; /* outer background now white */
             --bg-dark: #212529;
             --bg-dark-2: #181b1e;
             --panel: rgba(255, 255, 255, 0.06);
@@ -32,6 +33,7 @@
             --input-bg: rgba(255, 255, 255, 0.02);
             --border: rgba(255, 255, 255, 0.08);
             --shadow: rgba(0, 0, 0, 0.28);
+            --card-max-width: 420px; /* ensure card fits on desktop */
         }
 
         * {
@@ -42,8 +44,8 @@
             margin: 0;
             min-height: 100%;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark-2) 0%, var(--bg-dark) 100%);
-            color: var(--text);
+            background: var(--page-bg); /* changed to white */
+            color: #212529; /* page text color when visible */
         }
 
         body {
@@ -56,38 +58,43 @@
 
         .login-shell {
             width: 100%;
-            max-width: 420px;
+            max-width: var(--card-max-width);
+            margin: 0 auto;
         }
 
         .login-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            box-shadow: 0 18px 45px var(--shadow);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: linear-gradient(180deg, rgba(33,37,41,0.95), rgba(24,27,30,0.98));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            overflow: hidden;
+            /* keep card height within viewport on large screens */
+            max-height: calc(100vh - 80px);
         }
 
+        /* make inner content scrollable if needed */
         .login-card .card-body {
-            padding: 2rem 1.75rem;
+            padding: 1.25rem 1rem;
+            overflow: auto;
         }
 
         .brand {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .brand-mark {
             width: 56px;
             height: 56px;
-            margin: 0 auto 16px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 18px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .brand-mark svg {
@@ -96,58 +103,60 @@
 
         .brand h2 {
             margin: 0;
-            font-size: clamp(1.8rem, 2vw, 2.2rem);
+            font-size: 1.25rem;
             font-weight: 800;
-            letter-spacing: -0.04em;
+            color: var(--text);
         }
 
         .brand p {
             margin: 6px 0 0;
             color: var(--muted);
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.3;
         }
 
         .welcome-title {
-            font-size: 1.6rem;
+            font-size: 1.15rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
+            color: var(--text);
             margin: 0 0 0.25rem;
         }
 
         .welcome-subtitle {
             color: var(--muted);
-            margin: 0 0 1.5rem;
-            font-size: 0.95rem;
+            margin: 0 0 1rem;
+            font-size: 0.9rem;
         }
 
         .alert {
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             background: rgba(220, 53, 69, 0.12);
             color: #ffd7dc;
-            padding: 0.8rem 1rem;
-            margin-bottom: 1.25rem;
+            padding: 0.65rem 0.9rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
         }
 
         .form-label {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 0.5rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0.45rem;
         }
 
         .form-control {
             width: 100%;
-            height: 48px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--input-bg);
+            height: 44px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
             color: var(--text);
-            padding: 0.75rem 0.9rem;
+            padding: 0.65rem 0.75rem;
             outline: none;
             box-shadow: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            font-size: 0.95rem;
         }
 
         .form-control::placeholder {
@@ -157,14 +166,14 @@
         .form-control:focus {
             border-color: rgba(255,255,255,0.18);
             background: rgba(255,255,255,0.03);
-            box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.04);
             color: var(--text);
         }
 
         .form-check-input {
             width: 1rem;
             height: 1rem;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255,255,255,0.08);
             background: rgba(255,255,255,0.02);
         }
 
@@ -175,8 +184,8 @@
 
         .form-check-label,
         .secondary-link {
-            color: var(--muted);
-            font-size: 0.88rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.86rem;
             text-decoration: none;
         }
 
@@ -187,25 +196,26 @@
 
         .btn-login {
             width: 100%;
-            height: 48px;
+            height: 44px;
             background: linear-gradient(180deg, #f4f4f4 0%, #eaeaea 100%);
             color: var(--bg-dark);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 700;
             letter-spacing: 0.01em;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            font-size: 0.95rem;
         }
 
         .btn-login:hover {
             transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
         }
 
         .divider {
             position: relative;
-            margin: 1.5rem 0 1rem;
+            margin: 1.25rem 0 0.75rem;
             text-align: center;
             color: rgba(255,255,255,0.45);
             font-size: 0.72rem;
@@ -220,7 +230,7 @@
             right: 0;
             top: 50%;
             height: 1px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.06);
         }
 
         .divider span {
@@ -232,9 +242,9 @@
 
         .register-text {
             text-align: center;
-            color: var(--muted);
+            color: rgba(255,255,255,0.8);
             font-size: 0.88rem;
-            margin: 0;
+            margin: 0.5rem 0 0;
         }
 
         .register-text a {
@@ -246,6 +256,12 @@
         .register-text a:hover {
             text-decoration: underline;
         }
+
+        @media (min-width: 1100px) {
+            /* keep the card comfortably within large desktop viewports */
+            .login-shell { max-width: 420px; }
+        }
+
     </style>
 
 </head>
